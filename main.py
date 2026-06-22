@@ -24,7 +24,6 @@ menuOptions = """\n==================================\n
 
 kingdom = {"gold": 1000, "food": 500, "population": 100, "army": 25, "happiness": 75}
 
-
 def clearConsole():
     os.system("cls")
 
@@ -108,12 +107,14 @@ def menu():
                     clearConsole()
                     turn += 1
                     consumeFood()
+                    saveData()
                     input("\nPress Enter...")
 
                 case "8":
                     clearConsole()
                     turn += 1
                     consumeFood()
+                    loadData()
                     input("\nPress Enter...")
 
                 case "9":
@@ -300,5 +301,26 @@ def checkCurrentState():
         playAgain()
         return
 
+def saveData():
+    fileName = input("Enter the file name: ")
+    filePath = os.path.join(os.getcwd(), f"{fileName}.json")
+    with open(filePath, "w+") as f:
+        json.dump(kingdom, f, indent=4)
+    print(f"file path: {filePath}")
+    return
+
+def loadData():
+
+    global kingdom
+    filePath = input("Enter the file path: ")
+
+    if not os.path.exists(filePath):
+        print("Invalid file path !!!")
+        return
+
+    with open(filePath, "r+") as f:
+        kingdom = json.load(f)
+    print("file loaded successfully !!!")
+    return
 
 menu()
