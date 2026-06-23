@@ -3,7 +3,6 @@
 import json
 import os
 import random
-import time
 
 banner = """==================================
         KINGDOM MANAGEMENT
@@ -23,6 +22,7 @@ menuOptions = """\n==================================\n
 ==================================\n"""
 
 kingdom = {"gold": 1000, "food": 500, "population": 100, "army": 25, "happiness": 75}
+
 
 def clearConsole():
     os.system("cls")
@@ -44,9 +44,8 @@ def menu():
     nextEventTurn = random.randint(3, 6)
 
     while True:
-
         checkCurrentState()
-    
+
         if turn >= nextEventTurn:
             trigger_event()
             nextEventTurn = turn + random.randint(3, 10)
@@ -64,56 +63,53 @@ def menu():
             match userChoice:
                 case "1":
                     clearConsole()
-                    collectTaxes()
                     turn += 1
                     consumeFood()
+                    collectTaxes()
                     input("\nPress Enter...")
 
                 case "2":
                     clearConsole()
-                    buyFood()
                     turn += 1
                     consumeFood()
+                    buyFood()
                     input("\nPress Enter...")
 
                 case "3":
                     clearConsole()
-                    trainSoldiers()
                     turn += 1
                     consumeFood()
+                    trainSoldiers()
                     input("\nPress Enter...")
 
                 case "4":
                     clearConsole()
-                    expandTerritory()
                     turn += 1
                     consumeFood()
+                    expandTerritory()
                     input("\nPress Enter...")
 
                 case "5":
                     clearConsole()
                     kingdomReport()
-                    turn += 1
-                    consumeFood()
                     input("\nPress Enter...")
 
                 case "6":
                     clearConsole()
                     turn += 1
                     consumeFood()
+                    print("Turn ended !!!")
                     input("\nPress Enter...")
 
                 case "7":
                     clearConsole()
-                    turn += 1
-                    consumeFood()
+                    showBanner()
                     saveData()
                     input("\nPress Enter...")
 
                 case "8":
                     clearConsole()
-                    turn += 1
-                    consumeFood()
+                    showBanner()
                     loadData()
                     input("\nPress Enter...")
 
@@ -128,6 +124,7 @@ def menu():
 
 
 def collectTaxes():
+    showBanner()
     taxRate = random.randint(2, 5)
     estimatedTax = kingdom["population"] * taxRate
 
@@ -148,6 +145,7 @@ def collectTaxes():
 
 
 def buyFood():
+    showBanner()
     amount = int(input("Enter the amount of food you want to buy: "))
     costOfFood = amount * 2
     print("Buying food !!!")
@@ -155,9 +153,11 @@ def buyFood():
     kingdom["food"] += amount
     print("Food bought !!!")
     print(f"+{amount} food\n-{costOfFood} gold")
+    return
 
 
 def trainSoldiers():
+    showBanner()
     soldiers = int(input("Enter the number of the people you want to train: "))
     costOfFood = soldiers * 2
     goldExpense = soldiers * 10
@@ -170,10 +170,11 @@ def trainSoldiers():
     print(
         f"+{soldiers} army\n-{costOfFood} food\n-{goldExpense} gold\n-{soldiers} population"
     )
+    return
 
 
 def expandTerritory():
-
+    showBanner()
     print("Expanding territory !!!")
     successRate = random.randint(1, 100)
     successRate += kingdom["army"] // 10
@@ -190,6 +191,7 @@ def expandTerritory():
         print(
             f"+{goldIncrease} gold\n+{foodIncrease} food\n+{populationIncrease} population\n+{happinessIncrease} happiness\n"
         )
+        return
     elif successRate > 30:
         goldIncrease = random.randint(50, 200)
         foodIncrease = random.randint(25, 125)
@@ -199,10 +201,11 @@ def expandTerritory():
         kingdom["food"] += foodIncrease
         kingdom["population"] += populationIncrease
         kingdom["happiness"] += happinessIncrease
-        print("Territory Expanded !!!")
+        print("A small village added !!!")
         print(
             f"+{goldIncrease} gold\n+{foodIncrease} food\n+{populationIncrease} population\n+{happinessIncrease} happiness\n"
         )
+        return
     else:
         goldDecrease = random.randint(50, 200)
         armyDecrease = random.randint(5, 20)
@@ -210,13 +213,15 @@ def expandTerritory():
         kingdom["gold"] -= goldDecrease
         kingdom["population"] -= armyDecrease
         kingdom["happiness"] -= happinessDecrease
-        print("Territory Expanded !!!")
+        print("Expansion Failed !!!")
         print(
             f"-{goldDecrease} gold\n-{armyDecrease} army\n-{happinessDecrease} happiness\n"
         )
+        return
 
 
 def kingdomReport():
+    showBanner()
     print("Kingdom Report -->\n")
 
     for asset, assetQuantity in kingdom.items():
@@ -233,11 +238,14 @@ def kingdomReport():
         if kingdom["food"] > 500
         else "\nFood Situation: Poor"
     )
+    return
+
 
 def consumeFood():
     food_consumed = kingdom["population"] // 10
     kingdom["food"] -= food_consumed
     return
+
 
 def trigger_event():
 
@@ -280,28 +288,50 @@ def trigger_event():
         print("-200 food")
         return
 
+
 def playAgain():
     playChoice = input("Wanna play again (y/n)??\n>")
-    if playChoice == 'y' or playAgain == "yes":
+    if playChoice == "y" or playChoice == "yes":
         global kingdom
-        kingdom == {"gold": 1000, "food": 500, "population": 100, "army": 25, "happiness": 75}
+        kingdom = {
+            "gold": 1000,
+            "food": 500,
+            "population": 100,
+            "army": 25,
+            "happiness": 75,
+        }
         return
     else:
         print("Thank You !!!")
         exit()
 
+
 def checkCurrentState():
-    if kingdom["population"] >= 1000 and kingdom["army"] >= 200 and kingdom["gold"] >= 10000 and kingdom["happiness"] >= 70 and kingdom["food"] >= 2500:
+    showBanner()
+    if (
+        kingdom["population"] >= 1000
+        and kingdom["army"] >= 200
+        and kingdom["gold"] >= 10000
+        and kingdom["happiness"] >= 70
+        and kingdom["food"] >= 2500
+    ):
         print("You Won !!!")
         playAgain()
         return
-        
-    elif kingdom["population"] <= 10 and kingdom["army"] <= 5 and kingdom["gold"] <= 50 and kingdom["happiness"] <= 5 and kingdom["food"] <= 200:
+
+    elif (
+        kingdom["food"] <= 0
+        or kingdom["population"] <= 0
+        or kingdom["army"] <= 0
+        or kingdom["happiness"] <= 0
+    ):
         print("You lose !!!")
         playAgain()
         return
 
+
 def saveData():
+    showBanner()
     fileName = input("Enter the file name: ")
     filePath = os.path.join(os.getcwd(), f"{fileName}.json")
     with open(filePath, "w+") as f:
@@ -309,8 +339,9 @@ def saveData():
     print(f"file path: {filePath}")
     return
 
-def loadData():
 
+def loadData():
+    showBanner()
     global kingdom
     filePath = input("Enter the file path: ")
 
@@ -322,5 +353,6 @@ def loadData():
         kingdom = json.load(f)
     print("file loaded successfully !!!")
     return
+
 
 menu()
