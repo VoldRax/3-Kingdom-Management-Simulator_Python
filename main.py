@@ -354,5 +354,4 @@ def loadData():
     print("file loaded successfully !")
     return
 
-
 menu()
