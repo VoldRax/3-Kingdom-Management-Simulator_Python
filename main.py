@@ -351,7 +351,7 @@ def loadData():
 
     with open(filePath, "r+") as f:
         kingdom = json.load(f)
-    print("file loaded successfully !!!")
+    print("file loaded successfully !")
     return
 
 
