@@ -21,7 +21,7 @@ menuOptions = """\n==================================\n
 
 ==================================\n"""
 
-kingdom = {"gold": 1000, "food": 500, "population": 100, "army": 25, "happiness": 75}
+kingdom = {"gold": 1000, "food": 500, "population": 100, "army": 25, "happiness": 5}
 
 
 def clearConsole():
@@ -115,14 +115,18 @@ def menu():
 
                 case "9":
                     print("Thank You!")
-                    break
+                    exit()
 
                 case _:
                     clearConsole()
                     print("Invalid choice!")
                     input("\nPress Enter...")
 
-
+def resourceCheck():
+    for resource in kingdom:
+        if kingdom[resource] < 0:
+            kingdom[resource] = 0
+    
 def collectTaxes():
     showBanner()
     taxRate = random.randint(2, 5)
@@ -139,6 +143,7 @@ def collectTaxes():
     happinessDecrease = random.randint(1, 8)
     kingdom["happiness"] -= happinessDecrease
 
+    resourceCheck()
     print("Tax Collected !!!")
     print(f"Tax Collected: {actualTax}")
     print(f"+{actualTax} gold\n-{happinessDecrease} happiness")
