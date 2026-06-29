@@ -21,11 +21,14 @@ menuOptions = """\n==================================\n
 
 ==================================\n"""
 
-kingdom = {"gold": 1000, "food": 500, "population": 100, "army": 25, "happiness": 5}
+kingdom = {"gold": 200, "food": 500, "population": 100, "army": 25, "happiness": 5}
 
 
 def clearConsole():
-    os.system("cls")
+    if os.name == "nt":
+        os.system("cls")
+    else:
+        os.system("clear")
 
 
 def showBanner():
@@ -36,6 +39,21 @@ def showBanner():
 def displayKingdomStats():
     for asset, assetQuantity in kingdom.items():
         print(f"{asset}: {assetQuantity}")
+
+
+def numericInputValidation(prompt):
+    while True:
+        try:
+            value = int(input(prompt))
+
+            if value <= 0:
+                print("Enter a number greater than 0.")
+                continue
+
+            return value
+
+        except ValueError:
+            print("Please enter a valid number.")
 
 
 def menu():
@@ -122,11 +140,14 @@ def menu():
                     print("Invalid choice!")
                     input("\nPress Enter...")
 
+
 def resourceCheck():
     for resource in kingdom:
         if kingdom[resource] < 0:
             kingdom[resource] = 0
-    
+    return
+
+
 def collectTaxes():
     showBanner()
     taxRate = random.randint(2, 5)
@@ -151,8 +172,11 @@ def collectTaxes():
 
 def buyFood():
     showBanner()
-    amount = int(input("Enter the amount of food you want to buy: "))
+    amount = numericInputValidation("Enter the amount of food you want to buy: ")
     costOfFood = amount * 2
+    if costOfFood > kingdom["gold"]:
+        print("Not enough gold !!!")
+        return
     print("Buying food !!!")
     kingdom["gold"] -= costOfFood
     kingdom["food"] += amount
@@ -163,17 +187,26 @@ def buyFood():
 
 def trainSoldiers():
     showBanner()
-    soldiers = int(input("Enter the number of the people you want to train: "))
-    costOfFood = soldiers * 2
+    soldiers = numericInputValidation("Enter the number of the people you want to train: ")
+    foodExpense = soldiers * 2
     goldExpense = soldiers * 10
+    if soldiers > kingdom["population"]:
+        print("Not enough people to train !!!")
+        return
+    if foodExpense > kingdom["food"]:
+        print("Not enough food !!!")
+        return
+    if goldExpense > kingdom["gold"]:
+        print("Not enough gold !!!")
+        return
     print("Training People !!!")
     kingdom["gold"] -= goldExpense
-    kingdom["food"] -= costOfFood
+    kingdom["food"] -= foodExpense
     kingdom["population"] -= soldiers
     kingdom["army"] += soldiers
     print("Food bought !!!")
     print(
-        f"+{soldiers} army\n-{costOfFood} food\n-{goldExpense} gold\n-{soldiers} population"
+        f"+{soldiers} army\n-{foodExpense} food\n-{goldExpense} gold\n-{soldiers} population"
     )
     return
 
@@ -216,12 +249,13 @@ def expandTerritory():
         armyDecrease = random.randint(5, 20)
         happinessDecrease = random.randint(3, 15)
         kingdom["gold"] -= goldDecrease
-        kingdom["population"] -= armyDecrease
+        kingdom["army"] -= armyDecrease
         kingdom["happiness"] -= happinessDecrease
         print("Expansion Failed !!!")
         print(
             f"-{goldDecrease} gold\n-{armyDecrease} army\n-{happinessDecrease} happiness\n"
         )
+        resourceCheck()
         return
 
 
@@ -354,9 +388,11 @@ def loadData():
         print("Invalid file path !!!")
         return
 
-    with open(filePath, "r+") as f:
-        kingdom = json.load(f)
-    print("file loaded successfully !")
-    return
+    try:
+        with open(filePath) as f:
+            kingdom = json.load(f)
+    except json.JSONDecodeError:
+        print("Invalid save file.")
+
 
 menu()
