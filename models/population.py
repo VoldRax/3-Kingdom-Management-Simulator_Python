@@ -1,23 +1,73 @@
-from army import Army
-
 class Population:
+
     def __init__(self):
-        self.total = self.jobs["farmers"] + self.jobs["workers"] + self.jobs["merchants"] + self.jobs["scholars"] + self.jobs["soldiers"]
         self.jobs = {
-                        "farmers": 50,
-                        "workers": 20,
-                        "merchants": 10,
-                        "scholars": 5,
-                        "soldiers": 30
-                        }
-        self.health = 80
-        self.happiness = 50
+            "farmers": 50,
+            "workers": 20,
+            "merchants": 10,
+            "scholars": 5,
+            "soldiers": 30
+        }
+
+        self.unemployed = 20
+
+    @property
+    def total(self):
+        return sum(self.jobs.values()) + self.unemployed
+
+    @property
+    def availableWorkers(self):
+        return self.unemployed
 
     def increase(self, amount):
-        self.total += amount
+        if amount <= 0:
+            return False
+
+        self.unemployed += amount
+        return True
 
     def decrease(self, amount):
-        self.total -= amount
+        if amount <= 0:
+            return False
+
+        if amount > self.unemployed:
+            return False
+
+        self.unemployed -= amount
+        return True
 
     def assignWorkers(self, job, amount):
-        pass
+        if amount <= 0:
+            return False
+
+        if job not in self.jobs:
+            return False
+
+        if amount > self.unemployed:
+            return False
+
+        self.unemployed -= amount
+        self.jobs[job] += amount
+
+        return True
+
+    def removeWorkers(self, job, amount):
+        if amount <= 0:
+            return False
+
+        if job not in self.jobs:
+            return False
+
+        if amount > self.jobs[job]:
+            return False
+
+        self.jobs[job] -= amount
+        self.unemployed += amount
+
+        return True
+
+    def getWorkers(self, job):
+        return self.jobs.get(job, 0)
+
+    def allJobs(self):
+        return self.jobs

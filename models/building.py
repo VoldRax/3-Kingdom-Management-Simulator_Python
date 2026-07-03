@@ -125,14 +125,18 @@ class BuildingManager:
         if building.buildingType not in self.buildings:
             self.buildings[building.buildingType] = []
 
-            self.buildings[building.buildingType].append(building)
+        self.buildings[building.buildingType].append(building)
 
     def destroy(self, buildingName):
-        for buildingList in self.buildings.values():
+        for buildingType, buildingList in self.buildings.items():
             for building in buildingList:
                 if building.name == buildingName:
                     buildingList.remove(building)
-                return building
+
+                    if not buildingList:
+                        del self.buildings[buildingType]
+
+                    return building
 
         return None
 
