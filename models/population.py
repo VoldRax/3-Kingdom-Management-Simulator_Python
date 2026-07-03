@@ -1,3 +1,5 @@
+from army import Army
+
 class Population:
     def __init__(self):
         self.total = self.jobs["farmers"] + self.jobs["workers"] + self.jobs["merchants"] + self.jobs["scholars"] + self.jobs["soldiers"]
