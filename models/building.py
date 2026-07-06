@@ -1,13 +1,13 @@
-class Buildings:
+class Building:
 
-    def __init__(self, buildingType, name=None):
-        self.buildingType = buildingType
-        self.name = name if name else buildingType
+    def __init__(self, building_type, name=None):
+        self.building_type = building_type
+        self.name = name if name else building_type
 
         self.level = 1
         self.cost = 50
         self.maintenance = 10
-        self.workersRequired = 12
+        self.workers_required = 12
 
     def upgrade(self):
         self.level += 1
@@ -16,7 +16,7 @@ class Buildings:
         if self.level > 1:
             self.level -= 1
 
-    def maintenanceCost(self, amount):
+    def increase_maintenance(self, amount):
         self.maintenance += amount
 
     def bonus(self):
@@ -25,123 +25,130 @@ class Buildings:
     def produce(self):
         return {}
 
-class Farm(Buildings):
+
+class Farm(Building):
 
     def __init__(self, name=None):
         super().__init__("Farm", name)
 
         self.cost = 40
         self.maintenance = 5
-        self.workersRequired = 6
+        self.workers_required = 6
 
-    def produceFood(self):
+    def produce_food(self):
         return 50 * self.level
 
     def produce(self):
         return {
-            "food": self.produceFood()
+            "food": self.produce_food()
         }
-    
-class Mine(Buildings):
+
+
+class Mine(Building):
 
     def __init__(self, name=None):
         super().__init__("Mine", name)
 
         self.cost = 80
         self.maintenance = 12
-        self.workersRequired = 10
+        self.workers_required = 10
 
-    def produceIron(self):
+    def produce_iron(self):
         return 20 * self.level
 
-    def produceCoal(self):
+    def produce_coal(self):
         return 10 * self.level
 
     def produce(self):
         return {
-            "iron": self.produceIron(),
-            "coal": self.produceCoal()
+            "iron": self.produce_iron(),
+            "coal": self.produce_coal()
         }
 
-class Market(Buildings):
+
+class Market(Building):
 
     def __init__(self, name=None):
         super().__init__("Market", name)
 
         self.cost = 100
         self.maintenance = 15
-        self.workersRequired = 8
+        self.workers_required = 8
 
-    def generateTradeIncome(self):
+    def generate_trade_income(self):
         return 75 * self.level
 
     def produce(self):
         return {
-            "gold": self.generateTradeIncome()
+            "gold": self.generate_trade_income()
         }
 
 
-class Barracks(Buildings):
+class Barracks(Building):
 
     def __init__(self, name=None):
         super().__init__("Barracks", name)
 
         self.cost = 150
         self.maintenance = 20
-        self.workersRequired = 15
+        self.workers_required = 15
 
-    def trainUnits(self):
+    def train_units(self):
         return 5 * self.level
 
-class Hospital(Buildings):
+
+class Hospital(Building):
 
     def __init__(self, name=None):
         super().__init__("Hospital", name)
 
         self.cost = 120
         self.maintenance = 18
-        self.workersRequired = 10
+        self.workers_required = 10
 
-    def healPopulation(self):
+    def heal_population(self):
         return 15 * self.level
 
-class School(Buildings):
+
+class School(Building):
 
     def __init__(self, name=None):
         super().__init__("School", name)
 
         self.cost = 110
         self.maintenance = 15
-        self.workersRequired = 8
+        self.workers_required = 8
 
-    def educatePopulation(self):
+    def educate_population(self):
         return 10 * self.level
+
+
 class BuildingManager:
 
     def __init__(self):
         self.buildings = {}
 
     def construct(self, building):
-        if building.buildingType not in self.buildings:
-            self.buildings[building.buildingType] = []
+        if building.building_type not in self.buildings:
+            self.buildings[building.building_type] = []
 
-        self.buildings[building.buildingType].append(building)
+        self.buildings[building.building_type].append(building)
 
-    def destroy(self, buildingName):
-        for buildingType, buildingList in self.buildings.items():
-            for building in buildingList:
-                if building.name == buildingName:
-                    buildingList.remove(building)
+    def destroy(self, building_name):
+        for building_type, building_list in self.buildings.items():
+            for building in building_list:
+                if building.name == building_name:
+                    building_list.remove(building)
 
-                    if not buildingList:
-                        del self.buildings[buildingType]
+                    if not building_list:
+                        del self.buildings[building_type]
 
                     return building
 
         return None
 
-    def upgrade(self, buildingName):
-        building = self.find(buildingName)
+    def upgrade(self, building_name):
+        building = self.find(building_name)
 
         if building:
             building.upgrade()
@@ -149,26 +156,26 @@ class BuildingManager:
 
         return False
 
-    def find(self, buildingName):
-        for buildingList in self.buildings.values():
-            for building in buildingList:
-                if building.name == buildingName:
+    def find(self, building_name):
+        for building_list in self.buildings.values():
+            for building in building_list:
+                if building.name == building_name:
                     return building
 
         return None
 
-    def count(self, buildingType):
-        return len(self.buildings.get(buildingType, []))
+    def count(self, building_type):
+        return len(self.buildings.get(building_type, []))
 
     def all(self):
-        allBuildings = []
+        all_buildings = []
 
-        for buildingList in self.buildings.values():
-            allBuildings.extend(buildingList)
+        for building_list in self.buildings.values():
+            all_buildings.extend(building_list)
 
-        return allBuildings
+        return all_buildings
 
-    def produceResources(self):
+    def produce_resources(self):
         resources = {}
 
         for building in self.all():

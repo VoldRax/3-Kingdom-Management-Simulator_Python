@@ -1,8 +1,8 @@
-from economy import Economy
-from army import Army
-from population import Population
-from resources import Resources
-from building import BuildingManager
+from .economy import Economy
+from .army import Army
+from .population import Population
+from .resources import Resources
+from .building import BuildingManager
 
 
 class Kingdom:
@@ -16,58 +16,58 @@ class Kingdom:
         self.buildings = BuildingManager()
         self.turn = 0
 
-    def nextTurn(self):
+    def next_turn(self):
         self.turn += 1
 
         # Buildings produce resources
-        production = self.buildings.produceResources()
-        self.resources.addResources(production)
+        production = self.buildings.produce_resources()
+        self.resources.add_resources(production)
 
         # Population consumes food
-        self.resources.consumeFood(self.population.total)
+        self.resources.consume_food(self.population.total)
 
         # Economy updates
-        self.economy.nextTurn()
+        self.economy.next_turn()
 
-    def getSummary(self):
+    def get_summary(self):
         return {
-            "Kingdom": self.name,
-            "Turn": self.turn,
-            "Population": self.population.total,
-            "Unemployed": self.population.availableWorkers,
-            "Jobs": self.population.allJobs(),
-            "Resources": self.resources.allResources(),
-            "Army": self.army.summary(),
-            "Buildings": self.buildings.all(),
-            "Economy": self.economy.summary()
+            "kingdom": self.name,
+            "turn": self.turn,
+            "population": self.population.total,
+            "unemployed": self.population.available_workers,
+            "jobs": self.population.all_jobs(),
+            "resources": self.resources.all_resources(),
+            "army": self.army.summary(),
+            "buildings": self.buildings.all(),
+            "economy": self.economy.summary(),
         }
 
-    def toDict(self):
+    def to_dict(self):
         return {
             "name": self.name,
             "turn": self.turn,
             "economy": self.economy.summary(),
             "population": {
-                "jobs": self.population.allJobs(),
-                "unemployed": self.population.availableWorkers
+                "jobs": self.population.all_jobs(),
+                "unemployed": self.population.available_workers,
             },
-            "resources": self.resources.allResources(),
+            "resources": self.resources.all_resources(),
             "army": self.army.summary(),
-            "buildings": self.buildings.all()
+            "buildings": self.buildings.all(),
         }
 
-    def fromDict(self, data):
+    def from_dict(self, data):
         self.name = data["name"]
         self.turn = data["turn"]
 
         self.population.jobs = data["population"]["jobs"]
-        self.population.unemployed = data["population"]["unemployed"]
+        self.population.available_workers = data["population"]["unemployed"]
 
         self.resources.resources = data["resources"]
 
         self.economy.gold = data["economy"]["gold"]
-        self.economy.taxRate = data["economy"]["taxRate"]
-        self.economy.tradeIncome = data["economy"]["tradeIncome"]
+        self.economy.tax_rate = data["economy"]["tax_rate"]
+        self.economy.trade_income = data["economy"]["trade_income"]
         self.economy.expenses = data["economy"]["expenses"]
 
         self.army.morale = data["army"]["morale"]

@@ -5,7 +5,7 @@ class Resources:
             "food": 100,
             "wood": 50,
             "stone": 25,
-            "iron": 10
+            "iron": 10,
         }
 
     def increase(self, resource, amount):
@@ -31,16 +31,16 @@ class Resources:
 
         return self.resources[resource] >= amount
 
-    def consumeFood(self, amount):
+    def consume_food(self, amount):
         return self.decrease("food", amount)
 
     def get(self, resource):
         return self.resources.get(resource, 0)
 
-    def allResources(self):
+    def all_resources(self):
         return self.resources
 
-    def canAfford(self, costs):
+    def can_afford(self, costs):
         for resource, amount in costs.items():
             if not self.has(resource, amount):
                 return False
@@ -48,7 +48,7 @@ class Resources:
         return True
 
     def pay(self, costs):
-        if not self.canAfford(costs):
+        if not self.can_afford(costs):
             return False
 
         for resource, amount in costs.items():
@@ -56,6 +56,6 @@ class Resources:
 
         return True
 
-    def addResources(self, resources):
+    def add_resources(self, resources):
         for resource, amount in resources.items():
             self.increase(resource, amount)

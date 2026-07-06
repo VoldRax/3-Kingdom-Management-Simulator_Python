@@ -10,7 +10,7 @@ class Army:
         }
 
     @property
-    def totalUnits(self):
+    def total_units(self):
         return sum(self.units.values())
 
     def recruit(self, unit, amount):
@@ -20,7 +20,7 @@ class Army:
         self.units[unit] += amount
         return True
 
-    def removeUnits(self, unit, amount):
+    def remove_units(self, unit, amount):
         if unit not in self.units or amount <= 0:
             return False
 
@@ -30,35 +30,31 @@ class Army:
         self.units[unit] -= amount
         return True
 
-    def getUnits(self, unit):
+    def get_units(self, unit):
         return self.units.get(unit, 0)
 
-    def allUnits(self):
+    def all_units(self):
         return self.units
 
-    def changeMorale(self, amount):
+    def change_morale(self, amount):
         self.morale += amount
+        self.morale = max(0, min(100, self.morale))
 
-        if self.morale > 100:
-            self.morale = 100
-        elif self.morale < 0:
-            self.morale = 0
-
-    def calculatePower(self):
+    def calculate_power(self):
         power = (
             self.units["archers"] * 2 +
             self.units["infantry"] * 3 +
             self.units["cavalry"] * 5
         )
 
-        moraleBonus = power * (self.morale / 100)
+        morale_bonus = power * (self.morale / 100)
 
-        return int(moraleBonus)
+        return int(morale_bonus)
 
     def summary(self):
         return {
             "morale": self.morale,
-            "totalUnits": self.totalUnits,
+            "total_units": self.total_units,
             "units": self.units,
-            "power": self.calculatePower()
+            "power": self.calculate_power()
         }

@@ -262,6 +262,7 @@ Methods
 collect_taxes(kingdom)
 
 calculate_trade_income(kingdom)
+trade_income = (merchants × 2 + population × 0.1 + market_bonus) × happiness_modifier
 
 pay_maintenance(kingdom)
 

@@ -2,18 +2,18 @@ class Economy:
 
     def __init__(self):
         self.gold = 1000
-        self.taxRate = 3
-        self.tradeIncome = 18
+        self.tax_rate = 3
+        self.trade_income = 18
         self.expenses = 200
 
-    def addGold(self, amount):
+    def add_gold(self, amount):
         if amount <= 0:
             return False
 
         self.gold += amount
         return True
 
-    def removeGold(self, amount):
+    def remove_gold(self, amount):
         if amount <= 0:
             return False
 
@@ -23,41 +23,43 @@ class Economy:
         self.gold -= amount
         return True
 
-    def canAfford(self, amount):
+    def can_afford(self, amount):
         return self.gold >= amount
 
     def pay(self, amount):
-        return self.removeGold(amount)
+        return self.remove_gold(amount)
 
     def earn(self, amount):
-        return self.addGold(amount)
+        return self.add_gold(amount)
 
-    def changeTaxRate(self, newTaxRate):
-        if newTaxRate < 0:
+    def change_tax_rate(self, new_tax_rate):
+        if new_tax_rate < 0:
             return False
 
-        self.taxRate = newTaxRate
+        self.tax_rate = new_tax_rate
         return True
 
-    def calculateTotalIncome(self):
-        taxIncome = self.taxRate * 10
+    def calculate_total_income(self):
+        tax_income = self.tax_rate * 10
+        return tax_income + self.trade_income
 
-        return taxIncome + self.tradeIncome
-
-    def calculateTotalExpenses(self):
+    def calculate_total_expenses(self):
         return self.expenses
 
-    def netIncome(self):
-        return self.calculateTotalIncome() - self.calculateTotalExpenses()
+    def net_income(self):
+        return (
+            self.calculate_total_income()
+            - self.calculate_total_expenses()
+        )
 
-    def nextTurn(self):
-        self.gold += self.netIncome()
+    def next_turn(self):
+        self.gold += self.net_income()
 
     def summary(self):
         return {
             "gold": self.gold,
-            "taxRate": self.taxRate,
-            "tradeIncome": self.tradeIncome,
+            "tax_rate": self.tax_rate,
+            "trade_income": self.trade_income,
             "expenses": self.expenses,
-            "netIncome": self.netIncome()
+            "net_income": self.net_income(),
         }

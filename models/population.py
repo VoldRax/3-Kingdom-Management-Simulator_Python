@@ -6,7 +6,7 @@ class Population:
             "workers": 20,
             "merchants": 10,
             "scholars": 5,
-            "soldiers": 30
+            "soldiers": 30,
         }
 
         self.unemployed = 20
@@ -16,7 +16,7 @@ class Population:
         return sum(self.jobs.values()) + self.unemployed
 
     @property
-    def availableWorkers(self):
+    def available_workers(self):
         return self.unemployed
 
     def increase(self, amount):
@@ -36,7 +36,7 @@ class Population:
         self.unemployed -= amount
         return True
 
-    def assignWorkers(self, job, amount):
+    def assign_workers(self, job, amount):
         if amount <= 0:
             return False
 
@@ -51,7 +51,7 @@ class Population:
 
         return True
 
-    def removeWorkers(self, job, amount):
+    def remove_workers(self, job, amount):
         if amount <= 0:
             return False
 
@@ -66,8 +66,8 @@ class Population:
 
         return True
 
-    def getWorkers(self, job):
+    def get_workers(self, job):
         return self.jobs.get(job, 0)
 
-    def allJobs(self):
+    def all_jobs(self):
         return self.jobs
