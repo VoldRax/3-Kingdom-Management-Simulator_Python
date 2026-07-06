@@ -6,6 +6,8 @@ class Economy:
         self.trade_income = 18
         self.expenses = 200
 
+    # Helper Methods (never directly used)
+
     def add_gold(self, amount):
         if amount <= 0:
             return False
@@ -22,6 +24,8 @@ class Economy:
 
         self.gold -= amount
         return True
+    
+    # Methods which should be used
 
     def can_afford(self, amount):
         return self.gold >= amount

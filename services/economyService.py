@@ -1,3 +1,5 @@
+from constant import *
+
 class EconomyService:
 
     UNIT_UPKEEP = {
@@ -19,7 +21,7 @@ class EconomyService:
         print(f"Tax Rate: {tax_rate}")
         print("Collecting taxes...")
 
-        self.kingdom.economy.add_gold(taxes)
+        self.kingdom.economy.earn(taxes)
 
         print("Taxes Collected!")
         print(f"Gold Gained: +{taxes}")
@@ -51,9 +53,44 @@ class EconomyService:
             for unit, upkeep in self.UNIT_UPKEEP.items()
         )
 
-        if self.kingdom.economy.remove_gold(total_cost):
-            return total_cost
+        if self.kingdom.economy.can_afford(total_cost):
+            if self.kingdom.economy.pay(total_cost):
+                return total_cost
 
         return None
     
+    def buy_food(self, amount):
+
+        food_cost = amount * 2
+        if self.kingdom.economy.can_afford(food_cost):
+            if self.kingdom.economy.pay(food_cost):
+                return food_cost
+        
+        return None
     
+    def sell_resources(self):
+        resources = self.kingdom.resources.resources
+
+        sold = {}
+        total_gold = 0
+
+        for resource, amount in resources.items():
+
+            reserve = RESOURCE_RESERVES.get(resource, 0)
+            price = RESOURCE_PRICES.get(resource, 0)
+
+            excess = max(0, amount - reserve)
+
+            if excess > 0:
+                self.kingdom.resources.remove(resource, excess)
+
+                gold = excess * price
+                self.kingdom.economy.earn(gold)
+
+                sold[resource] = excess
+                total_gold += gold
+
+        return {
+            "sold": sold,
+            "gold_earned": total_gold
+        }

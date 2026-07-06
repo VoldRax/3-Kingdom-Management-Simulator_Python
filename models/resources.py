@@ -2,10 +2,11 @@ class Resources:
 
     def __init__(self):
         self.resources = {
-            "food": 100,
-            "wood": 50,
-            "stone": 25,
-            "iron": 10,
+            "food": 620,
+            "wood": 120,
+            "stone": 250,
+            "iron": 80,
+            "coal": 60
         }
 
     def increase(self, resource, amount):
