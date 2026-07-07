@@ -289,7 +289,11 @@ PopulationService
 Methods
 
 grow_population(kingdom)
+        Births = Population × Base Birth Rate × Happiness Modifier × Health Modifier × Food Modifier
 
+Deaths = Population × Base Death Rate × Disease/Starvation Modifier
+
+Net Growth = Births - Deaths
 calculate_births(kingdom)
 
 calculate_deaths(kingdom)

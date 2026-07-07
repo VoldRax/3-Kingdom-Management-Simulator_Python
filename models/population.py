@@ -5,11 +5,11 @@ class Population:
             "farmers": 50,
             "workers": 20,
             "merchants": 10,
-            "scholars": 5,
-            "soldiers": 30,
+            "scholars": 8,
         }
-
         self.unemployed = 20
+        self.happiness = 75
+        self.health = 100
 
     @property
     def total(self):

@@ -2,7 +2,6 @@ class Army:
 
     def __init__(self):
         self.morale = 80
-
         self.units = {
             "archers": 10,
             "infantry": 10,
