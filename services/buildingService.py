@@ -45,3 +45,12 @@ class BuildingService:
     
     def upgrade_building(self, building_name):
         pass
+
+    def repair_building(self, building_name):
+        pass
+
+    def demolish_building(self, building_name):
+        pass
+
+    def collect_building_production(self):
+        pass
