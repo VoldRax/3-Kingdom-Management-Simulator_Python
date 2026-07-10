@@ -42,15 +42,59 @@ class BuildingService:
         self.kingdom.buildings.construct(building)
 
         return True
-    
+
     def upgrade_building(self, building_name):
-        pass
+        building = self.kingdom.buildings.find(building_name)
+
+        if building is None:
+            return False
+
+        upgrade_cost = building.cost // 2
+
+        if not self.kingdom.economy.can_afford(upgrade_cost):
+            return False
+
+        self.kingdom.economy.remove_gold(upgrade_cost)
+
+        building.upgrade()
+        building.increase_maintenance(5)
+
+        return True
 
     def repair_building(self, building_name):
-        pass
+        building = self.kingdom.buildings.find(building_name)
+
+        if building is None:
+            return False
+
+        # Add durability later
+        return True
 
     def demolish_building(self, building_name):
-        pass
+        building = self.kingdom.buildings.destroy(building_name)
+
+        if building is None:
+            return False
+
+        self.kingdom.population.increase(building.workers_required)
+
+        return True
 
     def collect_building_production(self):
-        pass
+        production = self.kingdom.buildings.produce_resources()
+
+        for resource, amount in production.items():
+
+            if resource == "gold":
+                self.kingdom.economy.add_gold(amount)
+
+            elif resource == "food":
+                self.kingdom.resources.add_food(amount)
+
+            elif resource == "iron":
+                self.kingdom.resources.add_iron(amount)
+
+            elif resource == "coal":
+                self.kingdom.resources.add_coal(amount)
+
+        return production
